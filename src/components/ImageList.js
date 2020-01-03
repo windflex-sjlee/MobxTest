@@ -1,7 +1,30 @@
 import React from 'react';
-import {View, Text, TextInput, Button, FlatList, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+    View, Text, Button,
+    Container, Header, Content, Input, Item, Form, Label,
+} from 'native-base';
+
+import {TextInput, TouchableOpacity, FlatList, Image, StyleSheet, ScrollView } from 'react-native';
 
 import {inject, observer} from 'mobx-react';
+
+
+function MyForm(props) {
+    return(
+      
+          <Form>
+            <Item floatingLabel>
+              <Label>Username</Label>
+              <Input />
+            </Item>
+            <Item floatingLabel last>
+              <Label>Password</Label>
+              <Input />
+            </Item>
+          </Form>
+       
+    );
+};
 
 function ImageList(props) {
         // destructure vars from store to use
@@ -12,10 +35,11 @@ function ImageList(props) {
                 data={data}
                 keyExtractor={(item) => item.id }
                 renderItem={ ({item})=>(
-                    <TouchableOpacity style={{ alignItems:'center'}} onPress={()=>addToFavorite(item.image)}>
+                    //<TouchableOpacity style={{ alignItems:'center'}} onPress={()=>addToFavorite(item.image)}>
+                    <Button onPress={()=>addToFavorite(item.image) } >
                     <Text>{item.image}</Text>
                     <Image source={{uri: item.image}} style={{justifyContent:'center', width:'80%', height:200, borderRadius:30}} />
-                    </TouchableOpacity>
+                    </Button>//</TouchableOpacity>
                     )}
             /> 
             </ScrollView>
@@ -36,38 +60,45 @@ function ImageList(props) {
             </View>
         );
             return(
-                <>
-                <View style={styles.container}>
-            <Text style={{fontSize:40}}>{this.text}</Text>
-                    <View style={{width:50,height:50, backgroundColor:'red'}} />
-                    <TextInput 
+                <Container>
+                    <Header ><Text>MobX TEST</Text></Header>
+                <Content>
+                <Item regular>
+            <Input placeholder='Regular Textbox' />
+          </Item>
+                <View style={styles.container, {borderWidth:2}}>
+                    <Input 
                         style={styles.input}
                         value={text}
                         onChangeText={updateText}
                     />
-
-                    <TouchableOpacity
+                    <View>
+                        <MyForm />
+                    </View>
+                    <Button
                         style={styles.button}
                         onPress={searchImages}  >
                             <Text style={styles.buttonText}>Search</Text>
-                    </TouchableOpacity>
+                    </Button>
                     <Text>#{data?'true':'null'}#</Text>
                     { data ? comp_favor : comp_usual}
             <Text style={styles.count} >Images added: {getFavoriteCount} </Text>
                 </View>
-                </>
+                </Content>
+                </Container>
             );
 }
 
+
 export default inject("store")(observer(ImageList));
 
-const styles=StyleSheet.create({
-    container:{ flex:1, paddingTop:50, flexDirection:'column', backgroundColor:'gray', justifyContent:'center', alignItems:'center'},
-    favorites:{color:'red'},
-    input:{  width: 200, height:30, justifyContent:'center', backgroundColor:'white'},
-    button:{ paddingTop: 20, width:200, justifyContent:'center', alignItems:'center', backgroundColor:'blue', borderRadius:30 },
-    buttonText: {fontSize:30, justifyContent:'center', alignItems:'center'},
-    count:{flex:1, color:'red', fontSize: 30},
+const styles = StyleSheet.create({
+    container:{ flex:1, flexDirection:'column', justifyContent:'flex-start'},
+    favorites:{},
+    input:{  },
+    button:{ },
+    buttonText: {},
+    count:{},
 
 });
 
